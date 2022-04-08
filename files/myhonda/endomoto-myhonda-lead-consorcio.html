@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Formulário Web-to-lead MyHonda</title>
+</head>
+<body>
+
+    <link rel="stylesheet" type="text/css" href="http://jqueryvalidation.org/files/demo/site-demos.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+      html, body {
+        background: transparent;
+      }
+      label {
+        font-family: Roboto;
+        font-size: 16px;
+        font-weight: 400;
+        color: #737373;
+      }
+      .form-control {
+        padding: 12px;
+        height: 40px;
+        background-color: #FAFAFA;
+        border: 1px solid #CCC;
+        border-radius: 2px;
+        box-shadow: none;
+      }
+      .form-group label.error {
+        display: block;
+        float: none;
+      }
+      .form-control {
+        border-radius: 0;
+      }
+      .btn-submit {
+        font-family: Roboto;
+        color: #EEE;
+        background-color: #C00;
+        border-color: #C00;
+        border-radius: 3px;
+        padding: 14px 35px;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+      }  
+      .btn-submit:hover {
+        color: #EEE;
+        background-color: #C33;
+        border-color: #c33;
+        opacity: .8;
+      }  
+      input.error {
+        background: #fff8bb;
+      }
+      label.error {
+        color: red;
+        background: none;
+        margin-left: 0;
+        padding-left: 0;
+      }
+    </style>
+  
+    <form id="honda-leads" method="POST" action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8">
+    <fieldset>
+  
+      <!--
+        <input type="hidden" name="debug" value=1>
+        <input type="hidden" name="debugEmail" value="suporte@bimboo.com.br">
+      -->
+      <input type=hidden name="oid" value="00D61000000HSuF">
+      <!-- Código da concessionária (esta carregado por js) -->
+      <input type="hidden" id="dealer_code_interest__c" name="dealer_code_interest__c" value="1011383"/>
+  
+      <!-- URL de retorno/agradecimento -->
+      <input type=hidden name="retURL" value="https://files.lobodesign.com.br/media/images_site/endomoto-myhonda-lead-obrigado.html">
+  
+      <!-- 18 caracteres, fornecidos pelo consultor da concessionária -->
+      <input type="hidden" id="campaign" name="campaign" value=""/>
+  
+      <!-- valores relativos ao campo model_interest__c
+        HAB: Modelo ou versão de automóvel, Agendar Test-Drive, Receber contato, Preços e condições, Acessórios ou Semi-novo
+        HDA: Motos
+        CS: Modelo ou versão de automóvel, Serviços e peças
+        CNH: Consórcio, Financiamento ou Seguro
+      -->
+      <input type="hidden" id="type__c" name="type__c" value="CNH"/>
+  
+      <!-- 'WebSite Concessionária' ou 'Evento Concessionaria' -->
+      <input type="hidden" id="lead_source" name="lead_source" value="WebSite Concessionária"/>
+  
+      <!-- 'Site', 'Evento', 'Exposição', 'Mídias digitais' -->
+      <input type="hidden" id="sub_source_media__c" name="sub_source_media__c" value="Site"/>
+  
+      <div class="form-group">
+        <div class="radio-inline">
+          <label class="radio" for="tipo_pessoa-pf">
+          <input type="radio" name="tipo_pessoa" id="tipo_pessoa-pf" value="pf" checked="checked">
+          Pessoa Física
+        </label>
+        </div>
+        <div class="radio-inline">
+        <label class="radio" for="tipo_pessoa-pj">
+          <input type="radio" name="tipo_pessoa" id="tipo_pessoa-pj" value="pj">
+          Pessoa Juridica
+        </label>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="first_name">Nome</label>
+        <input id="first_name" name="first_name" type="text" maxlength="40" placeholder="" class="form-control input-md required">
+      </div>
+      
+      <div class="form-group">
+        <label for="last_name">Sobrenome</label>
+        <input id="last_name" name="last_name" type="text" maxlength="80" placeholder="" class="form-control input-md required">
+      </div>
+  
+      <div class="form-group">
+          <label for="email">E-mail</label>
+        <input id="email" name="email" type="text" placeholder="" maxlength="50" class="form-control input-md required email">
+      </div>
+  
+      <div class="form-group">
+        <label for="mobile">Celular</label>
+        <input id="mobile" name="mobile" type="text" placeholder="(67) + número" class="form-control input-md required celular">
+      </div>
+  
+      <div class="form-group">
+        <label for="cpf__c">CPF</label>
+        <input id="cpf__c" name="cpf__c" type="text" placeholder="000.000.000-00" class="form-control input-md required cpf">
+      </div>
+  
+      <div class="form-group" style="display: none">
+          <label for="cnpj__c">CNPJ</label>
+        <input id="cnpj__c" name="cnpj__c" type="text" placeholder="00.000.000/0000-00" class="form-control input-md required cnpj ignore">
+      </div>
+  
+      <div class="form-group" style="display:none">
+        <label for="regiao">Loja</label>
+        <select id="regiao" name="regiao" class="form-control required">
+          <option value="">Selecione</option>
+        </select>
+      </div>
+  
+      <div class="form-group" style="display:none">
+        <label for="model_interest__c-last">Interesse</label>
+        <select id="model_interest__c-last" name="model_interest__c-last" class="model_interest__c-fields form-control required">
+          <option value="Consórcio">Consórcio</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="model_interest__c-first">Modelo</label>
+        <select id="model_interest__c-first" name="model_interest__c-first" class="model_interest__c-fields form-control required">
+          <option value="Nenhum modelo em específico">Selecione o modelo</option>
+        </select>
+      </div>
+      <!-- Concatenação via JS dos valores acima -->
+      <input type="hidden" id="model_interest__c" name="model_interest__c" value="Outras informações"/>
+  
+      <div class="need-more-space">
+        <label style="display: block;float:none;">Quero ser contato via:</label>
+        <div class="form-group">
+          <div class="checkbox-inline">
+            <label for="contato_celular">
+              <input type="hidden" id="opt_in_phone__c" name="opt_in_phone__c" value="1"/>
+              <input type="checkbox" name="contato_celular" id="contato_celular" checked>
+              Celular
+            </label>
+          </div>
+          <div class="checkbox-inline">
+            <label for="contato_email">
+              <input type="hidden" id="opt_in_email__c" name="opt_in_email__c" value="1"/>
+              <input type="checkbox" name="contato_email" id="contato_email" checked>
+              E-mail
+            </label>
+          </div>
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <button id="sbmt" type="submit" class="btn btn-default btn-submit">Enviar</button>
+      </div>
+  
+    </fieldset>
+    </form>
+  
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/jquery.validate.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+  <script type="text/javascript">
+  jQuery(document).ready(function() {
+  
+      /*
+      var regioes = {
+        'Dourados - Jd. Caramuru' : '1011383',
+        'Dourados - Jd. Tropical' : '1735547',
+        'Nova Andradina - Centro' : '1031384'
+      };
+      */
+      // Original segundo o manual
+      // var assuntos = [
+      //    'Serviços e Peças', 'Consórcio', 'Financiamento', 'Seguro',
+      //    'ACCORD EX V6', 'ACCORD EX', 'City DX', 'City EX', 'City EXL', 'City LX', 'Civic EXR', 'Civic LXR', 'Civic LXS', 'Civic Si', 'CR-V EX-L', 'Fit DX', 'Fit EX', 'Fit EXL', 'Fit LX', 'HR-V EX', 'HR-V EXL', 'HR-V LX'
+      // ];
+      /*
+      var assuntos = [
+          'Agendar Test Drive', 'Receber contato', 'Preços e Condições', 'Receber contato', 'Acessórios', 'Semi-novo',
+          'Agendamento de serviços', 'Peças', 'Manutenção periódica', 'Inspeção gratuíta', 'Consórcio',
+          'Financiamento', 'Seguro',
+      ];
+      */
+      var modelos = [
+      'Pop 110i', 'CG 160 FAN ESDI', 'Biz 110i', 'CG 160 TITAN EX', 'CG 160 START', 'Biz 125', 'Elite 125', 'SH 150I', 'CB Twister CBS', 'CB Twister ABS', 'CB 1000R', 'XRE 190', 'NC 750X ABS', 'NXR160 BROS ESDD', 'CRF 1000L AFRICA TWIN', 'CB 500X ABS', 'XRE 300 ABS', 'CRF 230F', 'CRF 250F', 'TRX 420 FM', 'CBR 650F ABS'
+      ];
+  
+      // Popular assunto
+      /*
+      var model_interest__c_last = jQuery("#model_interest__c-last");
+      jQuery.each(assuntos, function(key, value) {
+      jQuery(model_interest__c_last)
+           .append(jQuery("<option></option>")
+           .attr("value",value)
+           .text(value));
+      });
+      */
+  
+      // Popular modelo
+      var model_interest__c_first = jQuery("#model_interest__c-first");
+      jQuery.each(modelos, function(key, value) {
+        jQuery(model_interest__c_first)
+        .append(jQuery("<option></option>")
+        .attr("value",value)
+        .text(value));
+      });
+      
+      // Concatenar Modelo + Região
+      jQuery('.model_interest__c-fields').on('change', function(){
+           //jQuery('#model_interest__c').attr("value",jQuery('#model_interest__c-first').val() + ' - ' + jQuery('#model_interest__c-last').val());
+           jQuery('#model_interest__c').attr("value",jQuery('#model_interest__c-first').val() + ' - ' + 'Consórcio');
+      });
+  
+  
+      // Popular região
+      /*
+      var regiao = jQuery("#regiao");
+      jQuery.each(regioes, function(key, value) {
+      jQuery(regiao)
+           .append(jQuery("<option></option>")
+           .attr("value",value)
+           .text(key));
+      });
+      */
+  
+      /*
+      jQuery('#regiao').on('change', function(){
+           jQuery('#dealer_code_interest__c').attr("value",jQuery('#regiao').val());
+      });
+      */
+  
+      // PF ou PJ?
+      jQuery("input[name='tipo_pessoa']").click(function() {
+          if (jQuery("input[name='tipo_pessoa']:checked").val() == 'pf') {
+              jQuery('#cpf__c').closest('div.form-group').css('display', 'block').removeClass('ignore');
+              jQuery('#cnpj__c').val("").closest('div.form-group').css('display', 'none').addClass('ignore');
+          } else {
+              jQuery('#cpf__c').val("").closest('div.form-group').css('display', 'none').addClass('ignore');
+              jQuery('#cnpj__c').closest('div.form-group').css('display', 'block').removeClass('ignore');
+          }
+      });
+  
+      // Validações
+      mascara = {
+          'cpf': "999.999.999-99",
+          'cnpj': "99.999.999/9999-99",
+          'celular': "(99) 99999999?9",
+          'telefone': "(99) 99999999"
+      };
+      jQuery(".cpf").mask(mascara.cpf);
+      jQuery(".cnpj").mask(mascara.cnpj);
+      jQuery(".celular").mask(mascara.celular,{placeholder:" "});
+      jQuery(".telefone").mask(mascara.telefone,{placeholder:" "});
+      var somenteNumeros = /[^0-9]+/g;
+  
+      // CPF
+      jQuery.validator.addMethod("cpf", function(value, element) {
+        value = jQuery.trim(value);
+        value = value.replace('.','');
+        value = value.replace('.','');
+        cpf = value.replace('-','');
+        while(cpf.length < 11) cpf = "0"+ cpf;
+        var expReg = /^0+jQuery|^1+jQuery|^2+jQuery|^3+jQuery|^4+jQuery|^5+jQuery|^6+jQuery|^7+jQuery|^8+jQuery|^9+jQuery/;
+        var a = [];
+        var b = new Number;
+        var c = 11;
+        for (i=0; i<11; i++){
+            a[i] = cpf.charAt(i);
+            if (i < 9) b += (a[i] * --c);
+        }
+        if ((x = b % 11) < 2) { a[9] = 0 } else { a[9] = 11-x }
+        b = 0;
+        c = 11;
+        for (y=0; y<10; y++) b += (a[y] * c--);
+        if ((x = b % 11) < 2) { a[10] = 0; } else { a[10] = 11-x; }
+        var retorno = true;
+        if ((cpf.charAt(9) != a[9]) || (cpf.charAt(10) != a[10]) || cpf.match(expReg)) retorno = false;
+  
+        if(cpf.match(/^(\d)\1{10}/g) != null) {
+          retorno = false;
+        }
+  
+        return this.optional(element) || retorno;
+      }, "Informe um CPF válido");
+  
+      // CNPJ
+      jQuery.validator.addMethod("cnpj", function(cnpj, element) {
+      cnpj = jQuery.trim(cnpj);
+      cnpj = cnpj.replace('.','');
+      cnpj = cnpj.replace('.','');
+      cnpj = cnpj.replace('/','');
+      cnpj = cnpj.replace('-','');
+      console.log(cnpj);
+    var numeros, digitos, soma, resultado, pos, tamanho,
+      digitos_iguais = true;
+    if (cnpj.length < 14 && cnpj.length > 15)
+      return false;
+    for (var i = 0; i < cnpj.length - 1; i++)
+      if (cnpj.charAt(i) != cnpj.charAt(i + 1)) {
+        digitos_iguais = false;
+        break;
+      }
+    if (!digitos_iguais) {
+      tamanho = cnpj.length - 2
+      numeros = cnpj.substring(0,tamanho);
+      digitos = cnpj.substring(tamanho);
+      soma = 0;
+      pos = tamanho - 7;
+      for (i = tamanho; i >= 1; i--) {
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2)
+          pos = 9;
+      }
+      resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+      if (resultado != digitos.charAt(0))
+      return false;
+      tamanho = tamanho + 1;
+      numeros = cnpj.substring(0,tamanho);
+      soma = 0;
+      pos = tamanho - 7;
+      for (i = tamanho; i >= 1; i--) {
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2)
+          pos = 9;
+      }
+      resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+      if (resultado != digitos.charAt(1))
+        return false;
+  
+      return true;
+    }
+    return false;
+  }, "Informe um CNPJ válido.");
+  
+      // Celular
+      jQuery.validator.addMethod('celular', function(value, element) {
+          value = value.replace("(", "");
+          value = value.replace(")", "");
+          value = value.replace("-", "");
+          value = value.replace(" ", "").trim();
+          if (value == '0000000000') {
+              return (this.optional(element) || false);
+          } else if (value == '00000000000') {
+              return (this.optional(element) || false);
+          }
+          if (["00", "01", "02", "03", , "04", , "05", , "06", , "07", , "08", "09", "10"].indexOf(value.substring(0, 2)) != -1) {
+              return (this.optional(element) || false);
+          }
+          if (value.length < 10 || value.length > 11) {
+              return (this.optional(element) || false);
+          }
+          if (["6", "7", "8", "9"].indexOf(value.substring(2, 3)) == -1) {
+              return (this.optional(element) || false);
+          }
+          return (this.optional(element) || true);
+      }, 'Informe um celular válido');
+  
+      // Telefone fixo
+      jQuery.validator.addMethod('telefone', function(value, element) {
+          value = value.replace("(", "");
+          value = value.replace(")", "");
+          value = value.replace("-", "");
+          value = value.replace(" ", "").trim();
+          if (value == '0000000000') {
+              return (this.optional(element) || false);
+          } else if (value == '00000000000') {
+              return (this.optional(element) || false);
+          }
+          if (["00", "01", "02", "03", , "04", , "05", , "06", , "07", , "08", "09", "10"].indexOf(value.substring(0, 2)) != -1) {
+              return (this.optional(element) || false);
+          }
+          if (value.length < 10 || value.length > 11) {
+              return (this.optional(element) || false);
+          }
+          if (["1", "2", "3", "4", "5"].indexOf(value.substring(2, 3)) == -1) {
+              return (this.optional(element) || false);
+          }
+          return (this.optional(element) || true);
+      }, 'Informe um telefone válido');
+  
+      jQuery.extend(jQuery.validator.messages, {
+      required: "Este campo é requerido.",
+      remote: "Por favor, corrija este campo.",
+      email: "Por favor, forneça um endereço eletrônico válido.",
+      url: "Por favor, forneça uma URL válida.",
+      date: "Por favor, forneça uma data válida.",
+      dateISO: "Por favor, forneça uma data válida (ISO).",
+      number: "Por favor, forneça um número válido.",
+      digits: "Por favor, forneça somente dígitos.",
+      creditcard: "Por favor, forneça um cartão de crédito válido.",
+      equalTo: "Por favor, forneça o mesmo valor novamente.",
+      accept: "Por favor, forneça um valor com uma extensão válida.",
+      maxlength: jQuery.validator.format("Por favor, forneça não mais que {0} caracteres."),
+      minlength: jQuery.validator.format("Por favor, forneça ao menos {0} caracteres."),
+      rangelength: jQuery.validator.format("Por favor, forneça um valor entre {0} e {1} caracteres de comprimento."),
+      range: jQuery.validator.format("Por favor, forneça um valor entre {0} e {1}."),
+      max: jQuery.validator.format("Por favor, forneça um valor menor ou igual a {0}."),
+      min: jQuery.validator.format("Por favor, forneça um valor maior ou igual a {0}.")
+      });
+  
+      jQuery("#honda-leads").validate();
+  
+      jQuery('#contato_email').click(function(){
+          if (jQuery("#contato_email").prop("checked")) {
+              jQuery("#opt_in_email__c").val("1");
+          } else {
+              jQuery("#opt_in_email__c").val("0");
+          }
+      });
+      jQuery('#contato_celular').click(function(){
+          if (jQuery("#contato_celular").prop("checked")) {
+              jQuery("#opt_in_phone__c").val("1");
+          } else {
+              jQuery("#opt_in_phone__c").val("0");
+          }
+      });
+  
+      jQuery('#cpf__c').focusout(function(){
+          jQuery('#cpf__c').unmask(mascara.cpf).val(function(i,v){
+              return v.replace(somenteNumeros, "")
+          });
+      });
+      jQuery('#cpf__c').focusin(function(){jQuery('#cpf__c').mask(mascara.cpf)});
+  
+      jQuery('#cnpj__c').focusout(function(){
+          jQuery('#cnpj__c').unmask(mascara.cnpj).val(function(i,v){
+              return v.replace(somenteNumeros, "")
+          });
+      });
+      jQuery('#cnpj__c').focusin(function(){jQuery('#cnpj__c').mask(mascara.cnpj)});
+  
+      jQuery('#mobile').focusout(function(){
+          jQuery('#mobile').unmask(mascara.celular).val(function(i,v){
+              return v.replace(somenteNumeros, "")
+          });
+      });
+      jQuery('#mobile').focusin(function(){jQuery('#mobile').mask(mascara.celular)});
+  
+  });
+  </script>
+</body>
+</html>

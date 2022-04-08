@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Formulário Web-to-case MyHonda</title>
+</head>
+<body>
+
+    <link rel="stylesheet" type="text/css" href="https://jqueryvalidation.org/files/demo/site-demos.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+    <style>
+      html, body {
+        background: transparent;
+      }
+      label {
+        font-family: Roboto;
+        font-size: 16px;
+        font-weight: 400;
+        color: #737373;
+      }
+      .form-control {
+        padding: 12px;
+        height: 40px;
+        background-color: #FAFAFA;
+        border: 1px solid #CCC;
+        border-radius: 2px;
+        box-shadow: none;
+      }
+      .form-group label.error {
+        display: block;
+        float: none;
+      }
+      .form-control {
+        border-radius: 0;
+      }
+      .btn-submit {
+        font-family: Roboto;
+        color: #EEE;
+        background-color: #C00;
+        border-color: #C00;
+        border-radius: 3px;
+        padding: 14px 35px;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+      }  
+      .btn-submit:hover {
+        color: #EEE;
+        background-color: #C33;
+        border-color: #c33;
+        opacity: .8;
+      }  
+      input.error {
+        background: #fff8bb;
+      }
+      label.error {
+        color: red;
+        background: none;
+        margin-left: 0;
+        padding-left: 0;
+      }
+    </style>
+  
+  
+  <form id="honda-web-to-case" method="POST" action="https://webto.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8">
+    <fieldset>
+  
+    <!--
+      <input type="hidden" name="debug" value=1>
+      <input type="hidden" name="debugEmail" value="suporte@bimboo.com.br">
+    -->
+    <!--
+      Homologação: 00D5B000000Crvd
+      Homologação UAT: 00DQ000000EeOOX
+      Produção: 00D61000000HSuF
+    -->
+    <input type=hidden name="orgid" value="00D61000000HSuF">
+    <!-- URL de retorno/agradecimento -->
+    <input type=hidden name="retURL" value="https://files.lobodesign.com.br/media/images_site/endomoto-myhonda-case-obrigado.html">
+    <!-- Código da concessionária (esta carregado por js) -->
+    <input type="hidden" id="dealer_code__c" name="dealer_code__c" value="XXXXXXX"/>
+    <input type="hidden" id="priority" name="priority" value="Medium"/>
+  
+  
+  <!-- valores relativos ao campo recordType
+  Homologação: 0125B00000007TA
+  Produção: 01261000000WvnM
+  -->
+  <input type="hidden" id="recordType" name="recordType" value="01261000000WvnM"/>
+  
+  <div class="form-group">
+    <label for="subject">Assunto</label>
+    <select id="subject" name="subject" class="form-control required">
+      <option value="">Selecione</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label for="regiao">Loja</label>
+    <select id="regiao" name="regiao" class="form-control required">
+      <option value="">Selecione</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label for="AccountFirstName__c">Nome</label>
+    <input id="AccountFirstName__c" name="AccountFirstName__c" type="text" maxlength="80" placeholder="" class="form-control input-md required">
+  </div>
+  
+  <div class="form-group">
+    <label for="AccountLastName__c">Sobrenome</label>
+    <input id="AccountLastName__c" name="AccountLastName__c" type="text" maxlength="80" placeholder="" class="form-control input-md required">
+  </div>
+  
+  <div class="form-group">
+    <label for="cpf__c">CPF</label>
+    <input id="cpf__c" name="cpf__c" type="text" placeholder="000.000.000-00" class="form-control input-md required cpf">
+  </div>
+  
+  <div class="form-group">
+    <label for="name">Nome</label>
+    <input id="name" name="name" type="text" maxlength="80" placeholder="" class="form-control input-md required">
+  </div>
+  
+  <div class="form-group">
+    <label for="phone">Telefone fixo</label>
+    <input id="phone" name="phone" type="text" placeholder="(67) + número" class="form-control input-md required telefone">
+  </div>
+  
+  <div class="form-group">
+    <label for="mobilePhone__c">Celular</label>
+    <input id="mobile" name="mobilePhone__c" type="text" placeholder="(67) + número" class="form-control input-md required celular">
+  </div>
+  
+  <div class="form-group">
+    <label for="email">E-mail</label>
+    <input id="email" name="email" type="text" placeholder="" maxlength="50" class="form-control input-md required email">
+  </div>
+  
+  <div class="form-group">
+    <label for="description">Mensagem</label>
+    <textarea id="description" name="description" placeholder="" maxlength="32000" class="form-control input-md required descricao"></textarea>
+  </div>
+  
+  <textarea name="solicitation__c" style="display:none"></textarea>
+  <input type="hidden" name="external" value="1">
+  
+  <div class="form-group">
+    <button id="sbmt" type="submit" name="submit" class="btn btn-default btn-submit">Enviar</button>
+  </div>
+  
+  </fieldset>
+  </form>
+  
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/jquery.validate.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+  <script type="text/javascript">
+  jQuery(document).ready(function() {
+  
+      var regioes = {
+        'Dourados - Jd. Caramuru' : '1011383',
+        'Dourados - Jd. Tropical' : '1735547',
+        'Nova Andradina - Centro' : '1031384'
+      };
+      var assuntos = [
+      'Sugestão', 'Comentário', 'Elogio', 'Dúvida', 'Reclamação'
+      ];
+  
+      // Popular assunto
+      var subject = jQuery("#subject");
+      jQuery.each(assuntos, function(key, value) {
+        jQuery(subject)
+        .append(jQuery("<option></option>")
+         .attr("value",value)
+         .text(value));
+      });
+  
+      // Popular região
+      var regiao = jQuery("#regiao");
+      jQuery.each(regioes, function(key, value) {
+        jQuery(regiao)
+        .append(jQuery("<option></option>")
+         .attr("value",value)
+         .text(key));
+      });
+  
+      jQuery('#regiao').on('change', function(){
+       jQuery('#dealer_code__c').attr("value",jQuery('#regiao').val());
+     });
+  
+      // Validações
+      mascara = {
+        'cpf': "999.999.999-99",
+        'cnpj': "99.999.999/9999-99",
+        'celular': "(99) 99999999?9",
+        'telefone': "(99) 99999999"
+      };
+      jQuery(".cpf").mask(mascara.cpf);
+      jQuery(".celular").mask(mascara.celular,{placeholder:" "});
+      jQuery(".telefone").mask(mascara.telefone,{placeholder:" "});
+      var somenteNumeros = /[^0-9]+/g;
+  
+      // CPF
+      jQuery.validator.addMethod("cpf", function(value, element) {
+        value = jQuery.trim(value);
+        value = value.replace('.','');
+        value = value.replace('.','');
+        cpf = value.replace('-','');
+        while(cpf.length < 11) cpf = "0"+ cpf;
+        var expReg = /^0+jQuery|^1+jQuery|^2+jQuery|^3+jQuery|^4+jQuery|^5+jQuery|^6+jQuery|^7+jQuery|^8+jQuery|^9+jQuery/;
+        var a = [];
+        var b = new Number;
+        var c = 11;
+        for (i=0; i<11; i++){
+          a[i] = cpf.charAt(i);
+          if (i < 9) b += (a[i] * --c);
+        }
+        if ((x = b % 11) < 2) { a[9] = 0 } else { a[9] = 11-x }
+          b = 0;
+        c = 11;
+        for (y=0; y<10; y++) b += (a[y] * c--);
+          if ((x = b % 11) < 2) { a[10] = 0; } else { a[10] = 11-x; }
+        var retorno = true;
+        if ((cpf.charAt(9) != a[9]) || (cpf.charAt(10) != a[10]) || cpf.match(expReg)) retorno = false;
+        return this.optional(element) || retorno;
+      }, "Informe um CPF válido");
+  
+  
+      // Celular
+      jQuery.validator.addMethod('celular', function(value, element) {
+        value = value.replace("(", "");
+        value = value.replace(")", "");
+        value = value.replace("-", "");
+        value = value.replace(" ", "").trim();
+        if (value == '0000000000') {
+          return (this.optional(element) || false);
+        } else if (value == '00000000000') {
+          return (this.optional(element) || false);
+        }
+        if (["00", "01", "02", "03", , "04", , "05", , "06", , "07", , "08", "09", "10"].indexOf(value.substring(0, 2)) != -1) {
+          return (this.optional(element) || false);
+        }
+        if (value.length < 10 || value.length > 11) {
+          return (this.optional(element) || false);
+        }
+        if (["6", "7", "8", "9"].indexOf(value.substring(2, 3)) == -1) {
+          return (this.optional(element) || false);
+        }
+        return (this.optional(element) || true);
+      }, 'Informe um celular válido');
+  
+      // Telefone fixo
+      jQuery.validator.addMethod('telefone', function(value, element) {
+        value = value.replace("(", "");
+        value = value.replace(")", "");
+        value = value.replace("-", "");
+        value = value.replace(" ", "").trim();
+        if (value == '0000000000') {
+          return (this.optional(element) || false);
+        } else if (value == '00000000000') {
+          return (this.optional(element) || false);
+        }
+        if (["00", "01", "02", "03", , "04", , "05", , "06", , "07", , "08", "09", "10"].indexOf(value.substring(0, 2)) != -1) {
+          return (this.optional(element) || false);
+        }
+        if (value.length < 10 || value.length > 11) {
+          return (this.optional(element) || false);
+        }
+        if (["1", "2", "3", "4", "5"].indexOf(value.substring(2, 3)) == -1) {
+          return (this.optional(element) || false);
+        }
+        return (this.optional(element) || true);
+      }, 'Informe um telefone válido');
+  
+      jQuery.extend(jQuery.validator.messages, {
+        required: "Este campo &eacute; requerido.",
+        remote: "Por favor, corrija este campo.",
+        email: "Por favor, forne&ccedil;a um endere&ccedil;o eletr&ocirc;nico v&aacute;lido.",
+        url: "Por favor, forne&ccedil;a uma URL v&aacute;lida.",
+        date: "Por favor, forne&ccedil;a uma data v&aacute;lida.",
+        dateISO: "Por favor, forne&ccedil;a uma data v&aacute;lida (ISO).",
+        number: "Por favor, forne&ccedil;a um n&uacute;mero v&aacute;lido.",
+        digits: "Por favor, forne&ccedil;a somente d&iacute;gitos.",
+        creditcard: "Por favor, forne&ccedil;a um cart&atilde;o de cr&eacute;dito v&aacute;lido.",
+        equalTo: "Por favor, forne&ccedil;a o mesmo valor novamente.",
+        accept: "Por favor, forne&ccedil;a um valor com uma extens&atilde;o v&aacute;lida.",
+        maxlength: jQuery.validator.format("Por favor, forne&ccedil;a n&atilde;o mais que {0} caracteres."),
+        minlength: jQuery.validator.format("Por favor, forne&ccedil;a ao menos {0} caracteres."),
+        rangelength: jQuery.validator.format("Por favor, forne&ccedil;a um valor entre {0} e {1} caracteres de comprimento."),
+        range: jQuery.validator.format("Por favor, forne&ccedil;a um valor entre {0} e {1}."),
+        max: jQuery.validator.format("Por favor, forne&ccedil;a um valor menor ou igual a {0}."),
+        min: jQuery.validator.format("Por favor, forne&ccedil;a um valor maior ou igual a {0}.")
+      });
+  
+      jQuery("#honda-web-to-case").validate();
+  
+      jQuery('#cpf__c').focusout(function(){
+        jQuery('#cpf__c').unmask(mascara.cpf).val(function(i,v){
+          return v.replace(somenteNumeros, "")
+        });
+      });
+      jQuery('#cpf__c').focusin(function(){jQuery('#cpf__c').mask(mascara.cpf)});
+  
+      jQuery('#mobile').focusout(function(){
+        jQuery('#mobile').unmask(mascara.celular).val(function(i,v){
+          return v.replace(somenteNumeros, "")
+        });
+      });
+      jQuery('#mobile').focusin(function(){jQuery('#mobile').mask(mascara.celular)});
+  
+      jQuery('#phone').focusout(function(){
+        jQuery('#phone').unmask(mascara.celular).val(function(i,v){
+          return v.replace(somenteNumeros, "")
+        });
+      });
+      jQuery('#phone').focusin(function(){jQuery('#Phone').mask(mascara.celular)});
+  
+    });
+  </script>
+</body>
+</html>
